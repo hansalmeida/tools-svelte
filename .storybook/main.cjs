@@ -20,6 +20,9 @@ module.exports = {
         extensions: config.resolve.extensions,
       }),
     ]
+
+    const svelteLoader = config.module.rules.find((r) => r?.loader?.includes("svelte-loader"))
+    svelteLoader.options.preprocess = require("svelte-preprocess")()
     return config
   },
 }
