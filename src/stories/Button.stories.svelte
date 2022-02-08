@@ -9,7 +9,7 @@
   title="Example/Button"
   component={Button}
   argTypes={{
-    background: { control: "color" },
+    backgroundColor: { control: "color" },
   }}
 />
 
@@ -22,6 +22,6 @@
 <Story
   name="Primary"
   args={{
-    background: "red",
+    backgroundColor: "red",
   }}
 />

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { readableColor } from "polished"
 
-  export let background = "red"
+  export let backgroundColor = "red"
 
   let buttonRef: HTMLButtonElement
-  $: color = readableColor(background)
+  $: color = readableColor(backgroundColor)
 
   const createRipple = (event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
     const ripple = document.createElement("span")
@@ -43,7 +43,7 @@
   }
 </script>
 
-<button bind:this={buttonRef} on:click on:click={createRipple} style:background style:color>
+<button bind:this={buttonRef} on:click on:click={createRipple} style:backgroundColor style:color>
   <slot />
 </button>
 
