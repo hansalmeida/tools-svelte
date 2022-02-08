@@ -1,75 +1,61 @@
-<script>
-  import { createEventDispatcher } from "svelte"
-  /**
-   * Is this the principal call to action on the page?
-   */
-  export let primary = false
+<script lang="ts">
+  import { readableColor } from "polished"
 
-  /**
-   * What background color to use
-   */
-  export let backgroundColor
-  /**
-   * How large should the button be?
-   */
-  export let size = "medium"
-  /**
-   * Button contents
-   */
-  export let label = ""
+  export let background = "red"
 
-  let mode = primary ? "storybook-button--primary" : "storybook-button--secondary"
+  let buttonRef: HTMLButtonElement
+  $: color = readableColor(background)
 
-  let style = backgroundColor ? `background-color: ${backgroundColor}` : ""
+  const createRipple = (event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
+    const ripple = document.createElement("span")
+    buttonRef.appendChild(ripple)
 
-  const dispatch = createEventDispatcher()
+    const { clientWidth, clientHeight } = buttonRef
 
-  /**
-   * Optional click handler
-   */
-  function onClick(event) {
-    dispatch("click", event)
+    const maxSize = clientWidth > clientHeight ? clientWidth * 5 : clientHeight * 5
+
+    const { clientX, clientY } = event
+    const { offsetLeft, offsetTop } = event.currentTarget
+
+    const xPosition = clientX - offsetLeft
+    const yPosition = clientY - offsetTop
+
+    Object.assign(ripple.style, {
+      position: "absolute",
+      transform: "translate(-50%, -50%)",
+      left: `${xPosition}px`,
+      top: `${yPosition}px`,
+      background: color,
+      borderRadius: "50%",
+      touchAction: "none",
+      pointerEvents: "none",
+    })
+
+    ripple.animate(
+      [
+        { width: "0px", height: "0px", opacity: 0.5 },
+        { width: `${maxSize}px`, height: `${maxSize}px`, opacity: 0 },
+      ],
+      { duration: 500 }
+    )
+
+    setTimeout(() => buttonRef.removeChild(ripple), 500)
   }
 </script>
 
-<button
-  type="button"
-  class={["storybook-button", `storybook-button--${size}`, mode].join(" ")}
-  {style}
-  on:click={onClick}
->
-  {label}
+<button bind:this={buttonRef} on:click on:click={createRipple} style:background style:color>
+  <slot />
 </button>
 
 <style lang="scss">
-  .storybook-button {
-    font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 700;
-    border: 0;
-    border-radius: 3em;
+  button {
+    position: relative;
+    padding: 0.5rem 1rem;
+
+    overflow: hidden;
+
     cursor: pointer;
-    display: inline-block;
-    line-height: 1;
-  }
-  .storybook-button--primary {
-    color: white;
-    background-color: #1ea7fd;
-  }
-  .storybook-button--secondary {
-    color: #333;
-    background-color: transparent;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
-  }
-  .storybook-button--small {
-    font-size: 12px;
-    padding: 10px 16px;
-  }
-  .storybook-button--medium {
-    font-size: 14px;
-    padding: 11px 20px;
-  }
-  .storybook-button--large {
-    font-size: 16px;
-    padding: 12px 24px;
+    border: none;
+    border-radius: 5rem;
   }
 </style>
