@@ -45,3 +45,22 @@
 <Story name="Error">
   <TextField label="Label" error="Error message" />
 </Story>
+
+<Story name="Icon">
+  <TextField label="Label">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/How_to_use_icon.svg/1200px-How_to_use_icon.svg.png"
+      width="16px"
+      height="16px"
+      alt=""
+      slot="icon-left"
+    />
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/How_to_use_icon.svg/1200px-How_to_use_icon.svg.png"
+      width="16px"
+      height="16px"
+      alt=""
+      slot="icon-right"
+    />
+  </TextField>
+</Story>

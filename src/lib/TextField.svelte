@@ -11,19 +11,36 @@
   $: inputColor = error ? "red" : active ? "blue" : "black"
   $: placeholderValue = active ? placeholder : ""
   $: shouldMaintainLabelActive = active || value.length > 0
+
+  let iconLeftRef: HTMLDivElement
 </script>
 
 <div class="text-field">
   <div class="input-section">
     <div class="outline" style:--color={inputColor}>
       <div class="outline-start" />
-      <div class="outline-content" class:active={shouldMaintainLabelActive}>
+
+      <div class="icon-left">
+        {#if $$slots["icon-left"]}
+          <slot name="icon-left" />
+        {/if}
+      </div>
+
+      <div class="outline-label" class:active={shouldMaintainLabelActive}>
         <label for={label} class:active>{label}</label>
       </div>
+
+      <div class="outline-content" />
+
+      <div class="icon-right">
+        {#if $$slots["icon-right"]}
+          <slot name="icon-right" />
+        {/if}
+      </div>
+
       <div class="outline-end" />
     </div>
 
-    <slot name="icon-left" />
     <input
       type="text"
       id={label}
@@ -31,9 +48,10 @@
       on:focus={handleFocus}
       on:blur={handleBlur}
       bind:value
+      class:hasIconLeft={$$slots["icon-left"]}
     />
-    <slot name="icon-right" />
   </div>
+
   {#if error}
     <span class="error">{error}</span>
   {/if}
@@ -63,7 +81,10 @@
     position: absolute;
     pointer-events: none;
 
-    display: flex;
+    display: grid;
+    grid:
+      "start iconLeft label content iconRight end"
+      /0.5rem 1rem auto 1fr 1rem 0.5rem;
 
     width: 100%;
     height: 100%;
@@ -80,8 +101,8 @@
       border-right: none;
     }
 
-    &-content {
-      grid-area: content;
+    &-label {
+      grid-area: label;
 
       display: flex;
       align-items: center;
@@ -113,6 +134,14 @@
       }
     }
 
+    &-content {
+      grid-area: content;
+
+      border: 2px solid var(--color);
+      border-left: none;
+      border-right: none;
+    }
+
     &-end {
       grid-area: end;
 
@@ -126,6 +155,28 @@
     }
   }
 
+  .icon {
+    &-left,
+    &-right {
+      display: flex;
+      align-items: center;
+
+      width: 1rem;
+      height: 100%;
+
+      border: 2px solid var(--color);
+      border-left: none;
+      border-right: none;
+    }
+
+    &-left {
+      grid-area: iconLeft;
+    }
+    &-right {
+      grid-area: iconRight;
+    }
+  }
+
   .error {
     margin-top: 0.25rem;
 
@@ -136,10 +187,14 @@
   input {
     width: 100%;
     height: 100%;
-    padding: 1rem;
+    padding: 1rem 1.75rem;
 
     outline: transparent;
     border: none;
     background: none;
+
+    &.hasIconLeft {
+      margin-left: 2rem;
+    }
   }
 </style>
