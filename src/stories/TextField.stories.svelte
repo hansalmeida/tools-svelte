@@ -35,7 +35,7 @@
 
 <!-- More on args: https://storybook.js.org/docs/svelte/writing-stories/args -->
 <Story
-  name="Primary"
+  name="Default"
   args={{
     label: "Label",
     placeholder: "Placeholder",
