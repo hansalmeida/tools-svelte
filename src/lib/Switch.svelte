@@ -1,7 +1,7 @@
 <script lang="ts">
   import { spring } from "svelte/motion"
 
-  export let active: boolean = false
+  export let enabled: boolean = false
 
   let switchRef: HTMLDivElement
   let ballRef: HTMLDivElement
@@ -10,15 +10,16 @@
     damping: 0.35,
   })
   $: if (switchRef) {
-    active ? ($ballSpring = switchRef.offsetWidth - 15) : ($ballSpring = 1)
+    enabled ? ($ballSpring = switchRef.offsetWidth - 15) : ($ballSpring = 1)
   }
   $: if (ballRef) {
     ballRef.style.left = `${$ballSpring}px`
   }
 </script>
 
-<div class="Switch" bind:this={switchRef} class:active on:click>
+<div class="Switch" bind:this={switchRef} class:enabled on:click>
   <div class="ball" bind:this={ballRef} />
+  <input type="checkbox" bind:checked={enabled} />
 </div>
 
 <style lang="scss">
@@ -54,5 +55,9 @@
 
     border-radius: 50%;
     background: white;
+  }
+
+  input {
+    appearance: none;
   }
 </style>

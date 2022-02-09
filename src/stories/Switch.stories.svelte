@@ -9,7 +9,7 @@
   title="Components/Switch"
   component={Switch}
   argTypes={{
-    active: {
+    enabled: {
       type: { name: "boolean", required: true },
     },
   }}
@@ -24,6 +24,6 @@
 <Story
   name="Primary"
   args={{
-    active: false,
+    enabled: false,
   }}
 />
