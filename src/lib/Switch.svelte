@@ -40,7 +40,7 @@
     border-radius: 5rem;
     background: gray;
 
-    &.active {
+    &.enabled {
       background: blue;
 
       justify-content: end;
